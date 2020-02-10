@@ -125,6 +125,9 @@ send(#nkport{protocol=Protocol, pid=Pid}=NkPort, Msg, Opts) when node(Pid)==node
             send(Pid, Msg, Opts)
     end;
 
+send(#nkport{pid=Pid}=NkPort, Msg, Opts) ->
+        rpc:call(node(Pid), ?MODULE, send, [NkPort, Msg, Opts]);
+
 send(Pid, _Msg, _Opts) when Pid==self() ->
     {error, same_process};
 
